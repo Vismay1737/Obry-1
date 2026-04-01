@@ -1,0 +1,164 @@
+name: openenv-cybersoc
+description: >
+  Cybersecurity SOC (Security Operations Center) defense simulation.
+  An AI agent must defend a simulated network by blocking attack IPs,
+  patching vulnerabilities, and scanning for threats across 3 difficulty levels.
+version: "1.0.0"
+entrypoint: app.py
+author: OpenEnv CyberSOC Team
+license: MIT
+
+environment:
+  python_version: "3.10"
+  runtime: fastapi
+  port: 7860
+
+observation_model:
+  class: Observation
+  module: env.models
+  fields:
+    open_ports:
+      type: list[int]
+      description: Currently open ports on the system
+    threat_level:
+      type: float
+      range: [0.0, 1.0]
+      description: Current threat level (0=safe, 1=critical)
+    traffic:
+      type: int
+      description: Network traffic in requests per second
+    blocked_ips:
+      type: list[str]
+      description: List of blocked IP addresses
+    active_attacks:
+      type: int
+      description: Number of active incoming attack attempts
+    vulnerabilities:
+      type: int
+      description: Number of unpatched system vulnerabilities
+    breach_detected:
+      type: bool
+      description: Whether a system breach has been detected
+    step_count:
+      type: int
+      description: Current step number in the episode
+
+action_model:
+  class: Action
+  module: env.models
+  fields:
+    action_type:
+      type: str
+      enum: [block_ip, scan, patch]
+      description: Defensive action type
+    target_ip:
+      type: str
+      optional: true
+      description: IP address to block (for block_ip action)
+    port:
+      type: int
+      optional: true
+      description: Port number to patch (for patch action)
+
+reward_model:
+  class: Reward
+  module: env.models
+  type: float
+  range: [-5.0, 2.0]
+  fields:
+    value:
+      type: float
+      description: Numerical reward value
+    reason:
+      type: str
+      description: Explanation for the reward
+    action_taken:
+      type: str
+      description: The action that generated this reward
+    blocked_attack:
+      type: bool
+      description: Whether an attack was successfully blocked
+    breach_penalty:
+      type: bool
+      description: Whether a breach penalty was applied
+
+tasks:
+  - id: cybersoc-easy
+    name: Basic Threat Response
+    difficulty: easy
+    max_steps: 30
+    description: >
+      Block at least 2 incoming attacks within 30 steps.
+      The network starts with 3-5 open ports and moderate threat level.
+    success_threshold: 0.5
+    grader: env.graders.grade_easy
+    metadata:
+      min_blocks_required: 2
+      breach_penalty: false
+      port_reduction_required: false
+
+  - id: cybersoc-medium
+    name: Advanced Perimeter Defense
+    difficulty: medium
+    max_steps: 40
+    description: >
+      Block at least 4 attacks AND reduce open ports by at least 2 within 40 steps.
+      Requires a combination of blocking, scanning, and patching.
+    success_threshold: 0.6
+    grader: env.graders.grade_medium
+    metadata:
+      min_blocks_required: 4
+      min_port_reduction: 2
+      breach_penalty: true
+      port_reduction_required: true
+
+  - id: cybersoc-hard
+    name: Zero-Breach Incident Response
+    difficulty: hard
+    max_steps: 50
+    description: >
+      Block at least 6 attacks without allowing any system breach within 50 steps.
+      Any breach ends the episode with heavy penalty. Requires strategic decision-making.
+    success_threshold: 0.7
+    grader: env.graders.grade_hard
+    metadata:
+      min_blocks_required: 6
+      breach_penalty: true
+      breach_terminates: true
+      port_reduction_required: false
+
+api:
+  reset:
+    method: POST
+    path: /reset
+    description: Reset the environment and return initial observation
+  step:
+    method: POST
+    path: /step
+    description: Execute one action step
+  state:
+    method: GET
+    path: /state
+    description: Get current full internal state
+  grade:
+    method: GET
+    path: /grade
+    description: Get current episode grade score
+
+inference:
+  script: inference.py
+  env_vars:
+    API_BASE_URL:
+      description: Base URL for the OpenAI-compatible API
+      default: https://api.openai.com/v1
+    MODEL_NAME:
+      description: Model name to use for inference
+      default: gpt-4o-mini
+    HF_TOKEN:
+      description: Hugging Face token (used as API key)
+      required: true
+
+resources:
+  max_runtime_minutes: 20
+  min_vcpu: 2
+  min_ram_gb: 8
