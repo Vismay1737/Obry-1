@@ -25,13 +25,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # ─── Python Dependencies ──────────────────────────────────────────────────────
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir \
-    pydantic>=2.0.0 \
-    openai>=1.0.0 \
-    fastapi>=0.104.0 \
-    "uvicorn[standard]>=0.24.0" \
-    python-multipart>=0.0.6 \
-    httpx>=0.25.0
+    && pip install --no-cache-dir -r requirements.txt
 
 # ─── Application Code ─────────────────────────────────────────────────────────
 COPY env/ ./env/
@@ -44,7 +38,7 @@ COPY README.md .
 EXPOSE 7860
 
 # ─── Healthcheck ──────────────────────────────────────────────────────────────
-HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
     CMD curl -f http://localhost:7860/health || exit 1
 
 # ─── Start Server ─────────────────────────────────────────────────────────────

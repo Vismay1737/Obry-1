@@ -10,3 +10,4 @@ env_local/
 dist/
 build/
 .DS_Store
+*.log

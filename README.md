@@ -1,3 +1,17 @@
+---
+title: OpenEnv CyberSOC
+emoji: 🛡️
+colorFrom: blue
+colorTo: green
+sdk: docker
+app_port: 7860
+pinned: false
+license: mit
+short_description: >
+  Cybersecurity SOC defense simulation — OpenEnv compatible AI environment
+  where an agent blocks attacks, patches vulnerabilities, and prevents breaches.
+---
+
 # 🛡️ OpenEnv CyberSOC — Cybersecurity Defense Environment
 
 A production-ready **OpenEnv**-compatible reinforcement learning environment that simulates a Cybersecurity Security Operations Center (SOC). An AI agent defends a network system from incoming attacks by blocking IPs, scanning for threats, and patching vulnerabilities.
