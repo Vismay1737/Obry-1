@@ -14,17 +14,16 @@ from env.models import Action
 from env.graders import grade
 from env.tasks import get_task
 
-# ─── Configuration ────────────────────────────────────────────────────────────
-API_BASE_URL = os.environ.get("API_BASE_URL", "https://api.openai.com/v1")
-MODEL_NAME = os.environ.get("MODEL_NAME", "gpt-4o-mini")
-HF_TOKEN = os.environ.get("HF_TOKEN", "")
+API_BASE_URL = os.environ.get("API_BASE_URL")
+MODEL_NAME = os.environ.get("MODEL_NAME")
+HF_TOKEN = os.environ.get("HF_TOKEN")
 LOCAL_IMAGE_NAME = os.environ.get("LOCAL_IMAGE_NAME", "")
 BENCHMARK = "openenv-cybersoc"
 
 # ─── OpenAI Client ────────────────────────────────────────────────────────────
 client = OpenAI(
     base_url=API_BASE_URL,
-    api_key=HF_TOKEN or "dummy-key",
+    api_key=HF_TOKEN,
     timeout=10.0,
     max_retries=0,
 )
