@@ -16,7 +16,7 @@ from env.tasks import get_task
 
 API_BASE_URL = os.environ.get("API_BASE_URL")
 MODEL_NAME = os.environ.get("MODEL_NAME")
-HF_TOKEN = os.environ.get("HF_TOKEN")
+HF_TOKEN = os.environ.get("HF_TOKEN") or os.environ.get("OPENAI_API_KEY")
 LOCAL_IMAGE_NAME = os.environ.get("LOCAL_IMAGE_NAME", "")
 BENCHMARK = "openenv-cybersoc"
 
