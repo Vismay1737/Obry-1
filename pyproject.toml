@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "openenv-cybersoc"
@@ -23,8 +23,9 @@ dependencies = [
     "httpx>=0.25.0"
 ]
 
-[tool.setuptools]
-packages = ["env"]
-
 [tool.openenv]
+environment = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["env"]
 environment = true
