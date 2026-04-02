@@ -23,17 +23,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # ─── Python Dependencies ──────────────────────────────────────────────────────
-COPY requirements.txt .
+COPY pyproject.toml .
+COPY README.md .
+COPY env/ ./env/
 RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir -r requirements.txt
+    && pip install --no-cache-dir .
 
 # ─── Application Code ─────────────────────────────────────────────────────────
-COPY env/ ./env/
 COPY app.py .
 COPY inference.py .
 COPY openenv.yaml .
-COPY pyproject.toml .
-COPY README.md .
 
 # ─── Port ─────────────────────────────────────────────────────────────────────
 EXPOSE 7860
