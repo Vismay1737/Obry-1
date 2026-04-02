@@ -23,9 +23,12 @@ dependencies = [
     "httpx>=0.25.0"
 ]
 
+[project.scripts]
+server = "server.app:main"
+
 [tool.openenv]
 environment = true
 
 [tool.hatch.build.targets.wheel]
-packages = ["env"]
+packages = ["env", "server"]
 environment = true

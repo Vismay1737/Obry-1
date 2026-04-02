@@ -24,13 +24,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # ─── Python Dependencies ──────────────────────────────────────────────────────
 COPY pyproject.toml .
+COPY uv.lock .
 COPY README.md .
 COPY env/ ./env/
+COPY server/ ./server/
 RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir .
+    && pip install --no-cache-dir uv \
+    && uv sync --system
 
 # ─── Application Code ─────────────────────────────────────────────────────────
-COPY app.py .
 COPY inference.py .
 COPY openenv.yaml .
 
@@ -42,4 +44,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
     CMD curl -f http://localhost:7860/health || exit 1
 
 # ─── Start Server ─────────────────────────────────────────────────────────────
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "7860", "--workers", "1"]
+CMD ["uvicorn", "server.app:app", "--host", "0.0.0.0", "--port", "7860", "--workers", "1"]

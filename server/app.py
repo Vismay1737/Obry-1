@@ -190,6 +190,9 @@ def get_task_endpoint(difficulty: str):
 
 
 # ─── Entry Point ─────────────────────────────────────────────────────────────
-if __name__ == "__main__":
+def main():
     port = int(os.environ.get("PORT", 7860))
-    uvicorn.run("app:app", host="0.0.0.0", port=port, reload=False)
+    uvicorn.run("server.app:app", host="0.0.0.0", port=port, reload=False)
+
+if __name__ == "__main__":
+    main()
