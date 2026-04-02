@@ -4,12 +4,12 @@ emoji: 🛡️
 colorFrom: blue
 colorTo: green
 sdk: docker
+tags:
+  - openenv
 app_port: 7860
 pinned: false
 license: mit
-short_description: >
-  Cybersecurity SOC defense simulation — OpenEnv compatible AI environment
-  where an agent blocks attacks, patches vulnerabilities, and prevents breaches.
+short_description: Cybersecurity SOC defense simulation - OpenEnv
 ---
 
 # 🛡️ OpenEnv CyberSOC — Cybersecurity Defense Environment
