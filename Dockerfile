@@ -32,6 +32,7 @@ COPY env/ ./env/
 COPY app.py .
 COPY inference.py .
 COPY openenv.yaml .
+COPY pyproject.toml .
 COPY README.md .
 
 # ─── Port ─────────────────────────────────────────────────────────────────────
