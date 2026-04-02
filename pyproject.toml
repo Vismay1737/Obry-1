@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openenv-cybersoc"
+version = "1.0.0"
+description = "Cybersecurity SOC (Security Operations Center) defense simulation."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+  { name = "OpenEnv CyberSOC Team" },
+]
+dependencies = [
+    "pydantic>=2.0.0",
+    "openai>=1.0.0",
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "python-multipart>=0.0.6",
+    "httpx>=0.25.0"
+]
