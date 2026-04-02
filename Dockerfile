@@ -29,8 +29,7 @@ COPY README.md .
 COPY env/ ./env/
 COPY server/ ./server/
 RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir uv \
-    && uv sync --system
+    && pip install --no-cache-dir .
 
 # ─── Application Code ─────────────────────────────────────────────────────────
 COPY inference.py .
