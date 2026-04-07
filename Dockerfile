@@ -10,9 +10,7 @@ LABEL description="Cybersecurity SOC defense simulation — OpenEnv compatible"
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PORT=7860 \
-    API_BASE_URL="https://api.openai.com/v1" \
-    MODEL_NAME="gpt-4o-mini" \
-    HF_TOKEN=""
+    MODEL_NAME="gpt-4o-mini"
 
 # ─── Working Directory ────────────────────────────────────────────────────────
 WORKDIR /app

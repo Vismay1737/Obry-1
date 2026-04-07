@@ -149,14 +149,14 @@ inference:
   script: inference.py
   env_vars:
     API_BASE_URL:
-      description: Base URL for the OpenAI-compatible API
-      default: https://api.openai.com/v1
+      description: Base URL for the LiteLLM proxy (injected by validator)
+      required: true
+    API_KEY:
+      description: API key for the LiteLLM proxy (injected by validator)
+      required: true
     MODEL_NAME:
       description: Model name to use for inference
       default: gpt-4o-mini
-    HF_TOKEN:
-      description: Hugging Face token (used as API key)
-      required: true
 
 resources:
   max_runtime_minutes: 20
