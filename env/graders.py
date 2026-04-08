@@ -27,7 +27,7 @@ def grade_easy(state: Dict[str, Any]) -> float:
     breach_bonus = 0.0 if breach_detected else 1.0
 
     score = (block_score * 0.70) + (threat_bonus * 0.15) + (breach_bonus * 0.15)
-    return round(min(1.0, max(0.0, score)), 4)
+    return round(min(0.999, max(0.001, score)), 4)
 
 
 def grade_medium(state: Dict[str, Any]) -> float:
@@ -62,7 +62,7 @@ def grade_medium(state: Dict[str, Any]) -> float:
         + (threat_bonus * 0.10)
         + (breach_bonus * 0.10)
     )
-    return round(min(1.0, max(0.0, score)), 4)
+    return round(min(0.999, max(0.001, score)), 4)
 
 
 def grade_hard(state: Dict[str, Any]) -> float:
@@ -96,7 +96,7 @@ def grade_hard(state: Dict[str, Any]) -> float:
         + (threat_bonus * 0.10)
         - miss_penalty
     )
-    return round(min(1.0, max(0.0, score)), 4)
+    return round(min(0.999, max(0.001, score)), 4)
 
 
 def grade(difficulty: str, state: Dict[str, Any]) -> float:

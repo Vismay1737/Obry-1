@@ -216,17 +216,22 @@ def run_task(difficulty: str, use_llm: bool = True) -> float:
                 
     except Exception as e:
         success = False
+        score = 0.001  # fallback: strictly > 0 per validator requirement
 
     finally:
         log_end(success=success, steps=step_num, rewards=rewards)
 
-    return 0.0
+    # Clamp to strictly (0, 1) as required by the validator
+    score = round(min(0.999, max(0.001, score)), 4)
+    return score
 
 def main():
     use_llm = _check_llm_available()
     difficulties = ["easy", "medium", "hard"]
-    for difficulty in difficulties:
-        run_task(difficulty, use_llm=use_llm)
+    task_ids = ["cybersoc-easy", "cybersoc-medium", "cybersoc-hard"]
+    for difficulty, task_id in zip(difficulties, task_ids):
+        score = run_task(difficulty, use_llm=use_llm)
+        print(f"[SCORE] task={task_id} score={score:.4f}", flush=True)
 
 if __name__ == "__main__":
     main()
