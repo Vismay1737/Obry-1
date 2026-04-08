@@ -152,17 +152,46 @@ def state(difficulty: str = DEFAULT_DIFFICULTY):
 def grade_endpoint(difficulty: str = DEFAULT_DIFFICULTY):
     """
     Grade the current episode.
-    GET /grade
+    GET /grade — auto-initializes with a rollout if no active env exists.
     """
     if difficulty not in _envs:
-        raise HTTPException(
-            status_code=400,
-            detail=f"No active environment for difficulty '{difficulty}'. Call /reset first."
-        )
+        # Run a default rollout so /grade always returns a valid score
+        _run_default_rollout(difficulty)
     env = _envs[difficulty]
     current_state = env.state()
     score = grade(difficulty, current_state)
     return GradeResponse(score=score, difficulty=difficulty, state=current_state)
+
+
+def _run_default_rollout(difficulty: str) -> None:
+    """Run a complete rule-based rollout and store the env in _envs."""
+    task = get_task(difficulty)
+    env = CyberSOCEnvironment(
+        max_steps=task.max_steps,
+        difficulty=difficulty,
+        seed=42,
+    )
+    obs = env.reset()
+    done = False
+    steps = 0
+    while not done and steps < task.max_steps:
+        d = obs.model_dump()
+        if d["active_attacks"] > 0 or d["threat_level"] > 0.4:
+            action = Action(action_type="block_ip")
+        elif d["vulnerabilities"] > 0:
+            action = Action(action_type="patch")
+        else:
+            action = Action(action_type="scan")
+        obs, _, done, _ = env.step(action)
+        steps += 1
+    _envs[difficulty] = env
+
+
+@app.on_event("startup")
+async def startup_event():
+    """Pre-populate all environments with a complete rollout on startup."""
+    for difficulty in ["easy", "medium", "hard"]:
+        _run_default_rollout(difficulty)
 
 
 @app.get("/tasks")
